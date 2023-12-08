@@ -1,0 +1,12 @@
+{
+    "mixed": {
+        "required": "Required",
+        "notType": "Invalid value"
+    },
+    "string": {
+        "max": "Maximum length is 255 characters"
+    },
+    "email": {
+        "invalid": "Invalid email address"
+    }
+}
