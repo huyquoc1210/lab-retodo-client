@@ -25,7 +25,7 @@ const FormTextField = (props: FormTextFieldProps) => {
         <TextField
             inputRef={ref}
             error={!isEmpty(error)}
-            helperText={error?.message && t(error.message)}
+            helperText={error?.message ? t(error.message) : ' '}
             {...others}
             {...rest}
         />

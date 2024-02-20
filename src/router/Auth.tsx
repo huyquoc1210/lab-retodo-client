@@ -1,4 +1,5 @@
 import LazyRouter from 'components/Router/LazyRouter';
+import PublicRouter from 'components/Router/PublicRouter';
 import Paths from 'constants/paths';
 import AuthLayout from 'layouts/Auth';
 import { lazy } from 'react';
@@ -10,7 +11,11 @@ const Register = LazyRouter(lazy(() => import('pages/Auth/Register')));
 
 const auth: RouteObject = {
     path: Paths.auth.route,
-    element: <AuthLayout />,
+    element: (
+        <PublicRouter>
+            <AuthLayout />
+        </PublicRouter>
+    ),
     children: [
         {
             path: Paths.auth.login.route,

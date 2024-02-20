@@ -5,5 +5,5 @@ module.exports = {
     quoteProps: 'consistent',
     jaxSingleQuote: true,
     trailingComma: 'all',
-    tabWidth: 4,
+    tabWidth: 2,
 };

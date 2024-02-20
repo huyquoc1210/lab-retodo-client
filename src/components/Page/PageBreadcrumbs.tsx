@@ -1,6 +1,7 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import HomeIcon from '@mui/icons-material/Home';
 import Box from '@mui/material/Box';
 import Breadcrumbs, { breadcrumbsClasses } from '@mui/material/Breadcrumbs';
@@ -13,6 +14,7 @@ const ICONS = {
     account: AccountCircleIcon,
     todo: FormatListBulletedIcon,
     overview: DashboardIcon,
+    date: CalendarMonthIcon,
 };
 
 interface Breadcrumb {

@@ -1,6 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import LockIcon from '@mui/icons-material/Lock';
 import LoadingButton from '@mui/lab/LoadingButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -12,11 +16,14 @@ import FromSpacing from 'components/Form/FormSpacing';
 import FormTextField from 'components/Form/FormTextField';
 import PageTitle from 'components/Page/PageTitle';
 import config from 'config';
+import { useState, type MouseEvent, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link as RouteLink } from 'react-router-dom';
 import Validator from 'utils/Validator';
 import * as yup from 'yup';
+import { signIn } from 'services/auth';
+import useAuth from 'hooks/useAuth';
 
 //c1
 // interface FormValues {
@@ -30,7 +37,7 @@ import * as yup from 'yup';
 // });
 
 const schema = yup.object({
-    email: Validator.email().required(),
+    username: Validator.string().required(),
     password: Validator.string().required(),
 });
 
@@ -45,6 +52,14 @@ type FormValues = ReturnType<typeof schema.validateSync>;
 
 const Login = () => {
     const { t } = useTranslation();
+    const { login } = useAuth();
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+    const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+    };
 
     const form = useForm<FormValues>({
         mode: 'onChange',
@@ -52,15 +67,27 @@ const Login = () => {
         defaultValues: schema.getDefault(),
     });
 
-    const handleSubmit = (data: FormValues) => {
-        console.log(data);
-        // const { onSubmit } = props;
-        // if (onSubmit) {
-        //     onSubmit(data);
-        // }
-
+    const handleSubmit = async (data: FormValues) => {
+        try {
+            await login(data);
+        } catch (error) {
+            console.log(error);
+        }
         form.reset();
     };
+
+    useEffect(() => {
+        signIn({
+            username: 'duclc',
+            password: 'Az123456@!',
+        })
+            .then((response) => {
+                console.log(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
 
     return (
         <PageTitle title={t('Login')}>
@@ -90,16 +117,37 @@ const Login = () => {
                     >
                         <FromSpacing>
                             <FormTextField
-                                name="email"
+                                name="username"
                                 required
-                                label={t('Email')}
+                                label={t('Username')}
                                 autoFocus
                             />
                             <FormTextField
                                 name="password"
                                 required
                                 label={t('PassWord')}
-                                type="password"
+                                type={showPassword ? 'text' : 'password'}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                onClick={
+                                                    handleClickShowPassword
+                                                }
+                                                onMouseDown={
+                                                    handleMouseDownPassword
+                                                }
+                                                edge="end"
+                                            >
+                                                {showPassword ? (
+                                                    <VisibilityOff />
+                                                ) : (
+                                                    <Visibility />
+                                                )}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
                             />
                         </FromSpacing>
                         <Box sx={{ mt: 3 }}>

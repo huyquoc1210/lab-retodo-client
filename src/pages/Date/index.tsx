@@ -2,15 +2,15 @@ import Box from '@mui/material/Box';
 import PageBreadcrumbs from 'components/Page/PageBreadcrumbs';
 import PageWrapper from 'components/Page/PageWrapper';
 import { useTranslation } from 'react-i18next';
-import CreateUser from './CreateUesr';
+import CreateDate from './CreateDate';
 
-const Account = () => {
+const Date = () => {
     const { t } = useTranslation();
 
     return (
-        <PageWrapper title={t('Account')}>
+        <PageWrapper title={t('Date')}>
             <PageBreadcrumbs
-                page={t('Account')}
+                page={t('Date')}
                 items={[
                     {
                         title: t('Home'),
@@ -18,13 +18,13 @@ const Account = () => {
                         icon: 'home',
                     },
                 ]}
-                icon="account"
+                icon="date"
             />
             <Box>
-                <CreateUser />
+                <CreateDate />
             </Box>
         </PageWrapper>
     );
 };
 
-export default Account;
+export default Date;

@@ -1,6 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import LoadingButton from '@mui/lab/LoadingButton';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -12,9 +14,12 @@ import Form from 'components/Form/Form';
 import FromSpacing from 'components/Form/FormSpacing';
 import FormTextField from 'components/Form/FormTextField';
 import PageTitle from 'components/Page/PageTitle';
+import { useEffect, useState, type MouseEvent } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Visibility from '@mui/icons-material/Visibility';
 
 interface FormValues {
     firstName: string;
@@ -29,18 +34,34 @@ const schema = yup.object({
     firstName: yup.string().required().max(255).trim().default(''),
     lastName: yup.string().required().trim().default(''),
     email: yup.string().email().required().trim().default(''),
-    password: yup.string().required().trim().when('confirmPassword',{
-        is:
-    }).default(''),
+    password: yup.string().required().trim().default(''),
     confirmPassword: yup
         .string()
-        .teat
-        .default(''),
+        .required()
+        .default('')
+        .test({
+            name: 'confirmPassword',
+            message: 'Mật khẩu không trùng khớp',
+            test: (value, context) => {
+                const { password } = context.parent;
+                if (value && password) {
+                    return value === password;
+                }
+                return true;
+            },
+        }),
     privacy: yup.boolean().default(false),
 });
 
 const Register = () => {
     const { t } = useTranslation();
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+    const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+    };
     // const [checked, setChecked] = useState<boolean>(false);
 
     // const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -52,6 +73,17 @@ const Register = () => {
         resolver: yupResolver(schema),
         defaultValues: schema.getDefault(),
     });
+
+    const [password, confirmPassword] = form.watch([
+        'password',
+        'confirmPassword',
+    ]);
+
+    useEffect(() => {
+        if (password && confirmPassword) {
+            form.trigger('confirmPassword');
+        }
+    }, [password, confirmPassword, form]);
 
     const handleSubmit = (data: FormValues) => {
         console.log(data);
@@ -130,11 +162,55 @@ const Register = () => {
                                 name="password"
                                 required
                                 label={t('Password')}
+                                type={showPassword ? 'text' : 'password'}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                onClick={
+                                                    handleClickShowPassword
+                                                }
+                                                onMouseDown={
+                                                    handleMouseDownPassword
+                                                }
+                                                edge="end"
+                                            >
+                                                {showPassword ? (
+                                                    <VisibilityOff />
+                                                ) : (
+                                                    <Visibility />
+                                                )}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
                             />
                             <FormTextField
                                 name="confirmPassword"
                                 required
                                 label={t('Confirm Password')}
+                                type={showPassword ? 'text' : 'password'}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                onClick={
+                                                    handleClickShowPassword
+                                                }
+                                                onMouseDown={
+                                                    handleMouseDownPassword
+                                                }
+                                                edge="end"
+                                            >
+                                                {showPassword ? (
+                                                    <VisibilityOff />
+                                                ) : (
+                                                    <Visibility />
+                                                )}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
                             />
                             <FormControlLabel
                                 control={

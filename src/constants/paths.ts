@@ -12,15 +12,19 @@ const Paths = {
         index: '/overview',
         route: 'overview',
     },
+    date: {
+        index: '/date',
+        route: 'date',
+    },
     auth: {
         route: 'auth',
         login: {
             index: '/auth/login',
-            route: 'login',
+            route: '/auth/login',
         },
         register: {
             index: '/auth/register',
-            route: 'register',
+            route: 'auth/register',
         },
     },
 } as const;

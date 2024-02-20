@@ -1,4 +1,5 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import PrivateRouter from 'components/Router/PrivateRouter';
 
 //Layout
 import MainLayout from 'layouts/Main';
@@ -9,6 +10,7 @@ import overview from './Overview';
 import account from './Account';
 import todo from './Todo';
 import start from './Start';
+import date from './Date';
 import RouterErrorBoundary from 'pages/Error/RouterErrorBoundary';
 
 const Router = () => {
@@ -16,9 +18,13 @@ const Router = () => {
         auth,
         {
             path: '/',
-            element: <MainLayout />,
+            element: (
+                <PrivateRouter>
+                    <MainLayout />
+                </PrivateRouter>
+            ),
             errorElement: <RouterErrorBoundary />,
-            children: [start, overview, account, todo],
+            children: [start, overview, account, todo, date],
         },
     ]);
 

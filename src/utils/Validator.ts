@@ -1,5 +1,7 @@
-import { setLocale, string } from 'yup';
+import { setLocale, string, type ObjectShape, object, array, mixed } from 'yup';
 import RegExps from './RegExps';
+import type { Dayjs } from 'dayjs';
+import DateTime from './DateTime';
 
 class Utils {
     constructor() {
@@ -14,12 +16,29 @@ class Utils {
         });
     }
 
+    public shape<T extends ObjectShape>(
+        additions: T,
+        excludes?: [string, string][],
+    ) {
+        return object().shape<T>(additions, excludes);
+    }
+
     public string() {
         return string().max(255).trim().default('');
     }
 
+    public array() {
+        return array().default([]);
+    }
+
     public email() {
         return this.string().matches(RegExps.email, 'validator.email.invalid');
+    }
+
+    public dayjs() {
+        return mixed<Dayjs>((value): value is Dayjs => DateTime.isValid(value))
+            .nullable()
+            .default(null);
     }
 }
 

@@ -12,6 +12,9 @@ import config from 'config';
 //I18n
 import 'locales';
 
+// Dayjs
+import 'dayjs/locale/vi';
+
 // Fonts
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -25,6 +28,9 @@ import ErrorBoundary from 'pages/Error/ErrorBoundary';
 import { HelmetProvider } from 'react-helmet-async';
 import { SettingsProvider } from 'contexts/Settings';
 import { ThemeProvider } from 'contexts/Theme';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { AuthProvider } from 'contexts/Auth';
 
 function App() {
     useEffect(() => {
@@ -35,14 +41,21 @@ function App() {
 
     return (
         <HelmetProvider>
-            <SettingsProvider>
-                <ThemeProvider>
-                    <CssBaseline enableColorScheme />
-                    <ErrorBoundary>
-                        <Router />
-                    </ErrorBoundary>
-                </ThemeProvider>
-            </SettingsProvider>
+            <AuthProvider>
+                <SettingsProvider>
+                    <ThemeProvider>
+                        <LocalizationProvider
+                            dateAdapter={AdapterDayjs}
+                            adapterLocale="vi"
+                        >
+                            <CssBaseline enableColorScheme />
+                            <ErrorBoundary>
+                                <Router />
+                            </ErrorBoundary>
+                        </LocalizationProvider>
+                    </ThemeProvider>
+                </SettingsProvider>
+            </AuthProvider>
         </HelmetProvider>
     );
 }
